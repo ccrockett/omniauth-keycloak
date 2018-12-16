@@ -9,17 +9,13 @@ Gem::Specification.new do |spec|
   spec.summary       = spec.description
   spec.homepage      = "https://github.com/ccrockett/omniauth-keycloak"
   spec.license       = "MIT"
+  spec.required_rubygems_version = '>= 1.3.5'
+  spec.required_ruby_version = '>= 2.2'
 
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
-    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^lib/}) }
-  end
-  
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
-
+  gem.executables   = `git ls-files -- bin/*`.split("\n").collect { |f| File.basename(f) }
+  gem.files         = `git ls-files`.split("\n")
+  gem.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
   
   spec.add_dependency "omniauth", "~> 1.8.1"
   spec.add_dependency "omniauth-oauth2", "~> 1.5.0"
