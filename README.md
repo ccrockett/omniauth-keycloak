@@ -29,6 +29,47 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 ```
 
+## Devise Usage
+Adapted from [Devise OmniAuth Instructions](https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview)
+
+```ruby
+# app/models/user.rb
+class User < ApplicationRecord
+  #...
+  devise :omniauthable, omniauth_providers: %i[keycloakopenid]
+  #...
+end
+
+# config/initializers/devise.rb
+config.omniauth :keycloak_openid, "Example-Client-Name", "example-secret-if-configured", client_options: { site: "https://example.keycloak-url.com", realm: "example-realm" }, :strategy_class => OmniAuth::Strategies::KeycloakOpenId
+
+# Below controller assumes callback route configuration following 
+# in config/routes.rb
+Devise.setup do |config|
+  # ...
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+end
+
+# app/controllers/users/omniauth_callbacks_controller.rb
+class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  def keycloakopenid
+    Rails.logger.debug(request.env["omniauth.auth"])
+    @user = User.from_omniauth(request.env["omniauth.auth"])
+    if @user.persisted?
+      sign_in_and_redirect @user, event: :authentication
+    else
+      session["devise.keycloakopenid_data"] = request.env["omniauth.auth"]
+      redirect_to new_user_registration_url
+    end
+  end
+
+  def failure
+    redirect_to root_path
+  end
+end
+
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/ccrockett/omniauth-keycloak. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
