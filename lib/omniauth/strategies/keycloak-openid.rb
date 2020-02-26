@@ -38,7 +38,24 @@ module OmniAuth
                     end
                 end
             end
-            
+
+            def request_phase
+                unless options.client_options['application_domain']
+                    redirect client_auth_code_authorize_url
+                    return
+                end
+
+                application_domain = URI.parse(options.client_options['application_domain']).host.downcase
+                request_domain = URI.parse(request.url).host.downcase
+                # if keycloak and the application live on the same domain we can just use the path and not the full domain
+                if application_domain == request_domain
+                    client_auth_code_authorize_url = client.auth_code.authorize_url({:redirect_uri => callback_url}.merge(authorize_params))
+                    redirect"#{URI.parse(client_auth_code_authorize_url).path}?#{URI.parse(client_auth_code_authorize_url).query}"
+                else
+                    redirect client_auth_code_authorize_url
+                end
+            end
+
             def build_access_token
                 verifier = request.params["code"]
                 client.auth_code.get_token(verifier, 

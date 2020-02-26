@@ -70,6 +70,22 @@ end
 
 ```
 
+## API Gateway Support
+
+Sometimes your Keycloak server and your application have the same domain name on the same path. This is 
+very common when using an api gateway service such as Mulesoft or Mashable where the requests are sent to different applications based on the path of the URI. 
+
+To configure simply add the `application_domain` to the client_options. If the `application_domain` matches the `site`
+then the redirect will only use the path. Otherwise it will use the full URI. Useful where staging has a seperate domain for your Keycloak server but
+production uses an API gateway.
+
+```ruby
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :keycloak_openid, 'Example-Client', '19cca35f-dddd-473a-bdd5-03f00d61d884',
+    client_options: {site: 'https://example.mydomain.com', application_domain: 'https://example.mydomain.com', realm: 'example-realm'}
+end
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/ccrockett/omniauth-keycloak. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
