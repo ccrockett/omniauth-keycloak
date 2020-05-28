@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Cameron Crockett"]
   spec.email         = ["cameron.crockett@ccrockett.com"]
   
-  spec.description   = %q{"Omniauth strategy for Keycloak"}
+  spec.description   = %q{Omniauth strategy for Keycloak}
   spec.summary       = spec.description
   spec.homepage      = "https://github.com/ccrockett/omniauth-keycloak"
   spec.license       = "MIT"
@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   
   spec.add_dependency "omniauth", "~> 1.9.0"
   spec.add_dependency "omniauth-oauth2", "~> 1.6.0"
-  spec.add_dependency 'json-jwt', '~> 1.11'
+  spec.add_dependency "json-jwt", "~> 1.12"
 
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 10.0"
