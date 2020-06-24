@@ -53,7 +53,7 @@ GEM
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
     public_suffix (3.0.3)
-    rack (2.2.2)
+    rack (2.2.3)
     rake (13.0.1)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
