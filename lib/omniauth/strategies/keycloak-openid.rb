@@ -1,6 +1,7 @@
 require 'omniauth'
 require 'omniauth-oauth2'
 require 'json/jwt'
+require 'uri'
 
 module OmniAuth
     module Strategies
@@ -23,7 +24,8 @@ module OmniAuth
 
                     raise_on_failure = options.client_options.fetch(:raise_on_failure, false)
 
-                    config_url = "#{options.client_options[:site]}/auth/realms/#{realm}/.well-known/openid-configuration"
+                    config_url = URI.join(site, "/auth/realms/#{realm}/.well-known/openid-configuration")
+
                     log :debug, "Going to get Keycloak configuration. URL: #{config_url}"
                     response = Faraday.get config_url
                     if (response.status == 200)
@@ -31,8 +33,8 @@ module OmniAuth
 
                         @certs_endpoint = json["jwks_uri"]
                         @userinfo_endpoint = json["userinfo_endpoint"]
-                        @authorize_url = json["authorization_endpoint"].gsub(site, "")
-                        @token_url = json["token_endpoint"].gsub(site, "")
+                        @authorize_url = URI(json["authorization_endpoint"]).path
+                        @token_url = URI(json["token_endpoint"]).path
 
                         log_config(json)
 
