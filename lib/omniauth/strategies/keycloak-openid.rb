@@ -1,44 +1,84 @@
 require 'omniauth'
 require 'omniauth-oauth2'
 require 'json/jwt'
+require 'uri'
 
 module OmniAuth
     module Strategies
         class KeycloakOpenId < OmniAuth::Strategies::OAuth2
+
+            class Error < RuntimeError; end
+            class ConfigurationError < Error; end
+            class IntegrationError < Error; end
+
             attr_reader :authorize_url
             attr_reader :token_url
             attr_reader :cert
 
             def setup_phase
                 if @authorize_url.nil? || @token_url.nil?
+                    prevent_site_option_mistake
+
                     realm = options.client_options[:realm].nil? ? options.client_id : options.client_options[:realm]
                     site = options.client_options[:site]
-                    response = Faraday.get "#{options.client_options[:site]}/auth/realms/#{realm}/.well-known/openid-configuration"
+
+                    raise_on_failure = options.client_options.fetch(:raise_on_failure, false)
+
+                    config_url = URI.join(site, "/auth/realms/#{realm}/.well-known/openid-configuration")
+
+                    log :debug, "Going to get Keycloak configuration. URL: #{config_url}"
+                    response = Faraday.get config_url
                     if (response.status == 200)
                         json = MultiJson.load(response.body)
+
                         @certs_endpoint = json["jwks_uri"]
                         @userinfo_endpoint = json["userinfo_endpoint"]
-                        @authorize_url = json["authorization_endpoint"].gsub(site, "")
-                        @token_url = json["token_endpoint"].gsub(site, "")
+                        @authorize_url = URI(json["authorization_endpoint"]).path
+                        @token_url = URI(json["token_endpoint"]).path
+
+                        log_config(json)
+
                         options.client_options.merge!({
                             authorize_url: @authorize_url,
                             token_url: @token_url
-                        })
+                                                      })
+                        log :debug, "Going to get certificates. URL: #{@certs_endpoint}"
                         certs = Faraday.get @certs_endpoint
                         if (certs.status == 200)
                             json = MultiJson.load(certs.body)
                             @cert = json["keys"][0]
+                            log :debug, "Successfully got certificate. Certificate length: #{@cert.length}"
                         else
-                            #TODO: Throw Error
-                            puts "Couldn't get Cert"
-                        end 
+                            message = "Coundn't get certificate. URL: #{@certs_endpoint}"
+                            log :error, message
+                            raise IntegrationError, message if raise_on_failure
+                        end
                     else
-                        #TODO: Throw Error
-                        puts response.status
+                        message = "Keycloak configuration request failed with status: #{response.status}. " \
+                                  "URL: #{config_url}"
+                        log :error, message
+                        raise IntegrationError, message if raise_on_failure
                     end
                 end
             end
-            
+
+            def prevent_site_option_mistake
+              site = options.client_options[:site]
+              return unless site =~ /\/auth$/
+
+              raise ConfigurationError, "Keycloak site parameter should not include /auth part, only domain. Current value: #{site}"
+            end
+
+            def log_config(config_json)
+              log_keycloak_config = options.client_options.fetch(:log_keycloak_config, false)
+              log :debug, "Successfully got Keycloak config"
+              log :debug, "Keycloak config: #{config_json}" if log_keycloak_config
+              log :debug, "Certs endpoint: #{@certs_endpoint}"
+              log :debug, "Userinfo endpoint: #{@userinfo_endpoint}"
+              log :debug, "Authorize url: #{@authorize_url}"
+              log :debug, "Token url: #{@token_url}"
+            end
+
             def build_access_token
                 verifier = request.params["code"]
                 client.auth_code.get_token(verifier, 
