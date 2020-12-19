@@ -1,8 +1,8 @@
 # Changelog
 
-## [v1.2.1](https://github.com/ccrockett/omniauth-keycloak/tree/HEAD)
+## [v1.2.1](https://github.com/ccrockett/omniauth-keycloak/tree/v1.2.1) (2020-12-19)
 
-[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.2.0...HEAD)
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.2.0...v1.2.1)
 
 **Closed issues:**
 
@@ -14,7 +14,6 @@
 
 - Raise errors on setup failure and logging with OmniAuth::Strategy::log method [\#10](https://github.com/ccrockett/omniauth-keycloak/pull/10) ([alexpetrov](https://github.com/alexpetrov))
 - Bump json from 2.1.0 to 2.3.1 [\#9](https://github.com/ccrockett/omniauth-keycloak/pull/9) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Bump rack from 2.2.2 to 2.2.3 [\#7](https://github.com/ccrockett/omniauth-keycloak/pull/7) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v1.2.0](https://github.com/ccrockett/omniauth-keycloak/tree/v1.2.0) (2020-05-28)
 
@@ -22,6 +21,7 @@
 
 **Merged pull requests:**
 
+- Bump rack from 2.2.2 to 2.2.3 [\#7](https://github.com/ccrockett/omniauth-keycloak/pull/7) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump activesupport from 6.0.1 to 6.0.3.1 [\#6](https://github.com/ccrockett/omniauth-keycloak/pull/6) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Update rake requirement from ~\> 10.0 to ~\> 13.0 [\#4](https://github.com/ccrockett/omniauth-keycloak/pull/4) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump rack from 2.0.7 to 2.0.8 [\#2](https://github.com/ccrockett/omniauth-keycloak/pull/2) ([dependabot[bot]](https://github.com/apps/dependabot))
