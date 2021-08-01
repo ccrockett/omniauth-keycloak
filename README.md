@@ -25,9 +25,12 @@ Here's a quick example, adding the middleware to a Rails app in `config/initiali
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :keycloak_openid, 'Example-Client', '19cca35f-dddd-473a-bdd5-03f00d61d884',
-    client_options: {site: 'https://example.keycloak-url.com', realm: 'example-realm'}
+    client_options: {site: 'https://example.keycloak-url.com', realm: 'example-realm'},
+    name: 'keycloak'
 end
 ```
+
+This will allow a POST request to `auth/keycloak`
 
 ## Devise Usage
 Adapted from [Devise OmniAuth Instructions](https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview)
