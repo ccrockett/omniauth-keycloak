@@ -35,7 +35,7 @@ RSpec.describe OmniAuth::Strategies::KeycloakOpenId do
       OmniAuth::Strategies::KeycloakOpenId.new('keycloak-openid', 'Example-Client', 'b53c572b-9f3b-4e79-bf8b-f03c799ba6ec',
         client_options: {site: 'http://localhost:8080/', realm: 'example-realm'})
     end
-    
+
     it 'should have the correct keycloak token url' do
       subject.setup_phase
       expect(subject.token_url).to eq('/auth/realms/example-realm/protocol/openid-connect/token')
@@ -44,6 +44,16 @@ RSpec.describe OmniAuth::Strategies::KeycloakOpenId do
     it 'should have the correct keycloak authorization url' do
       subject.setup_phase
       expect(subject.authorize_url).to eq('/auth/realms/example-realm/protocol/openid-connect/auth')
+    end
+  end
+
+  context 'client setup with a proc' do
+    subject do
+      OmniAuth::Strategies::KeycloakOpenId.new('keycloak-openid', setup: proc { throw :setup_proc_was_called })
+    end
+
+    it 'should call the proc' do
+      expect { subject.setup_phase }.to throw_symbol :setup_proc_was_called
     end
   end
 

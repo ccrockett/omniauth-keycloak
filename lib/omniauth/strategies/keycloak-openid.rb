@@ -16,6 +16,8 @@ module OmniAuth
             attr_reader :cert
 
             def setup_phase
+                super
+
                 if @authorize_url.nil? || @token_url.nil?
                     prevent_site_option_mistake
 
