@@ -13,7 +13,7 @@ module OmniAuth
 
             attr_reader :authorize_url
             attr_reader :token_url
-            attr_reader :cert
+            attr_reader :certs
 
             def setup_phase
                 if @authorize_url.nil? || @token_url.nil?
@@ -46,8 +46,8 @@ module OmniAuth
                         certs = Faraday.get @certs_endpoint
                         if (certs.status == 200)
                             json = MultiJson.load(certs.body)
-                            @cert = json["keys"][0]
-                            log :debug, "Successfully got certificate. Certificate length: #{@cert.length}"
+                            @certs = json["keys"]
+                            log :debug, "Successfully got certificate. Certificate length: #{@certs.length}"
                         else
                             message = "Coundn't get certificate. URL: #{@certs_endpoint}"
                             log :error, message
@@ -106,8 +106,8 @@ module OmniAuth
         
             def raw_info
                 id_token_string = access_token.token
-                jwk = JSON::JWK.new(@cert)
-                id_token = JSON::JWT.decode id_token_string, jwk
+                jwks = JSON::JWK::Set.new(@certs)
+                id_token = JSON::JWT.decode id_token_string, jwks
                 id_token
             end
 
