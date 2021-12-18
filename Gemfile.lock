@@ -18,7 +18,7 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     aes_key_wrap (1.1.0)
-    bindata (2.4.9)
+    bindata (2.4.10)
     concurrent-ruby (1.1.8)
     crack (0.4.5)
       rexml
