@@ -29,6 +29,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     name: 'keycloak'
 end
 ```
+This will allow a POST request to `auth/keycloak` since the name is set to keycloak
 
 Or using a proc setup with a custom options:
 
@@ -50,7 +51,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 ```
 
-This will allow a POST request to `auth/keycloak`
 
 ## Devise Usage
 Adapted from [Devise OmniAuth Instructions](https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview)
@@ -92,6 +92,17 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 end
 
 ```
+
+## Configuration
+  * __Base Url other than /auth__  
+  This gem tries to get the keycloak configuration from `"#{site}/auth/realms/#{realm}/.well-known/openid-configuration"`. If your keycloak server has been setup to use a different "root" url other than `/auth` then you need to pass in the `base_url` option when setting up the gem:
+    ```ruby
+    Rails.application.config.middleware.use OmniAuth::Builder do
+      provider :keycloak_openid, 'Example-Client', '19cca35f-dddd-473a-bdd5-03f00d61d884',
+        client_options: {site: 'https://example.keycloak-url.com', realm: 'example-realm', base_url: '/authorize'},
+        name: 'keycloak'
+    end
+    ```
 
 ## Contributing
 

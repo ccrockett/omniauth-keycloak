@@ -26,7 +26,7 @@ module OmniAuth
 
                     raise_on_failure = options.client_options.fetch(:raise_on_failure, false)
 
-                    config_url = URI.join(site, "/auth/realms/#{realm}/.well-known/openid-configuration")
+                    config_url = URI.join(site, "#{auth_url_base}/realms/#{realm}/.well-known/openid-configuration")
 
                     log :debug, "Going to get Keycloak configuration. URL: #{config_url}"
                     response = Faraday.get config_url
@@ -64,6 +64,14 @@ module OmniAuth
                 end
             end
 
+            def auth_url_base
+              return '/auth' unless options.client_options[:base_url]
+              base_url = options.client_options[:base_url]
+              return base_url if (base_url == '' || base_url[0] == '/')
+
+              raise ConfigurationError, "Keycloak base_url option should start with '/'. Current value: #{base_url}"
+            end
+
             def prevent_site_option_mistake
               site = options.client_options[:site]
               return unless site =~ /\/auth$/
@@ -83,14 +91,14 @@ module OmniAuth
 
             def build_access_token
                 verifier = request.params["code"]
-                client.auth_code.get_token(verifier, 
+                client.auth_code.get_token(verifier,
                     {:redirect_uri => callback_url.gsub(/\?.+\Z/, "")}
-                    .merge(token_params.to_hash(:symbolize_keys => true)), 
+                    .merge(token_params.to_hash(:symbolize_keys => true)),
                     deep_symbolize(options.auth_token_params))
             end
 
             uid{ raw_info['sub'] }
-        
+
             info do
             {
                 :name => raw_info['name'],
@@ -99,13 +107,13 @@ module OmniAuth
                 :last_name => raw_info['family_name']
             }
             end
-        
+
             extra do
             {
                 'raw_info' => raw_info
             }
             end
-        
+
             def raw_info
                 id_token_string = access_token.token
                 jwks = JSON::JWK::Set.new(@certs)
