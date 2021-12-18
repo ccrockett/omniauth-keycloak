@@ -30,6 +30,26 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 ```
 
+Or using a proc setup with a custom options:
+
+```ruby
+Rails.application.config.middleware.use OmniAuth::Builder do
+  SETUP_PROC = lambda do |env|
+    request = Rack::Request.new(env)
+    organization = Organization.find_by(host: request.host)
+    provider_config = organization.enabled_omniauth_providers[:keycloakopenid]
+
+    env["omniauth.strategy"].options[:client_id] = provider_config[:client_id]
+    env["omniauth.strategy"].options[:client_secret] = provider_config[:client_secret]
+    env["omniauth.strategy"].options[:client_options] = { site: provider_config[:site],  realm: provider_config[:realm] }
+  end
+
+  Rails.application.config.middleware.use OmniAuth::Builder do
+    provider :keycloak_openid, setup: SETUP_PROC
+  end
+end
+```
+
 This will allow a POST request to `auth/keycloak`
 
 ## Devise Usage
@@ -46,7 +66,7 @@ end
 # config/initializers/devise.rb
 config.omniauth :keycloak_openid, "Example-Client-Name", "example-secret-if-configured", client_options: { site: "https://example.keycloak-url.com", realm: "example-realm" }, :strategy_class => OmniAuth::Strategies::KeycloakOpenId
 
-# Below controller assumes callback route configuration following 
+# Below controller assumes callback route configuration following
 # in config/routes.rb
 Devise.setup do |config|
   # ...
