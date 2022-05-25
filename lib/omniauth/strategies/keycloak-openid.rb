@@ -110,7 +110,8 @@ module OmniAuth
 
             extra do
             {
-                'raw_info' => raw_info
+                'raw_info' => raw_info,
+                'id_token' => access_token['id_token']
             }
             end
 
