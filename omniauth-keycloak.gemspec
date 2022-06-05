@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
 
-  spec.add_dependency "omniauth", "~> 2.0.4"
+  spec.add_dependency "omniauth", ">= 2.0"
   spec.add_dependency "omniauth-oauth2", "~> 1.7.1"
   spec.add_dependency "json-jwt", "~> 1.13.0"
 
