@@ -17,7 +17,7 @@ Or install it yourself as:
     $ gem install omniauth-keycloak
 
 ## Use with Keycloak >= 17 (Quarkus distribution)
-In version 17 of Keycloak, `/auth` was removed from the default context path. (See Issue #29)  
+In version 17 of Keycloak, `/auth` was removed from the default context path. (See Issue [#29](https://github.com/ccrockett/omniauth-keycloak/issues/29))  
 In order to reduce breaking existing user's setup, this gem assumes `/auth` as the default context.  
 __So if you want to use Keycloak 17 or greater then you must do one of the following:__
 
