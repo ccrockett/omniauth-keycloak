@@ -31,7 +31,7 @@ module OmniAuth
                     log :debug, "Going to get Keycloak configuration. URL: #{config_url}"
                     response = Faraday.get config_url
                     if (response.status == 200)
-                        json = MultiJson.load(response.body)
+                        json = JSON.parse(response.body)
 
                         @certs_endpoint = json["jwks_uri"]
                         @userinfo_endpoint = json["userinfo_endpoint"]
@@ -47,7 +47,7 @@ module OmniAuth
                         log :debug, "Going to get certificates. URL: #{@certs_endpoint}"
                         certs = Faraday.get @certs_endpoint
                         if (certs.status == 200)
-                            json = MultiJson.load(certs.body)
+                            json = JSON.parse(response.body)
                             @certs = json["keys"]
                             log :debug, "Successfully got certificate. Certificate length: #{@certs.length}"
                         else

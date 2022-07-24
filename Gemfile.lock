@@ -1,9 +1,10 @@
 PATH
   remote: .
   specs:
-    omniauth-keycloak (1.4.1)
+    omniauth-keycloak (1.4.2)
+      faraday
       json-jwt (~> 1.13.0)
-      omniauth (~> 2.0.4)
+      omniauth (>= 2.0)
       omniauth-oauth2 (~> 1.7.1)
 
 GEM
