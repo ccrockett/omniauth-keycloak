@@ -47,7 +47,7 @@ module OmniAuth
                         log :debug, "Going to get certificates. URL: #{@certs_endpoint}"
                         certs = Faraday.get @certs_endpoint
                         if (certs.status == 200)
-                            json = JSON.parse(response.body)
+                            json = JSON.parse(certs.body)
                             @certs = json["keys"]
                             log :debug, "Successfully got certificate. Certificate length: #{@certs.length}"
                         else
