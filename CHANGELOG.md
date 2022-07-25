@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.4.4](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.4) (2022-07-25)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.3...v1.4.4)
+
+**Merged pull requests:**
+
+- Fix NoMethodError when querying for JSON Web keys [\#31](https://github.com/ccrockett/omniauth-keycloak/pull/31) ([Kazhuu](https://github.com/Kazhuu))
+- expose id\_token inside extra hash of auth hash [\#26](https://github.com/ccrockett/omniauth-keycloak/pull/26) ([rah-wtag](https://github.com/rah-wtag))
+
 ## [v1.4.3](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.3) (2022-07-24)
 
 [Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.2...v1.4.3)
@@ -33,7 +42,6 @@
 
 **Merged pull requests:**
 
-- expose id\_token inside extra hash of auth hash [\#26](https://github.com/ccrockett/omniauth-keycloak/pull/26) ([rah-wtag](https://github.com/rah-wtag))
 - Bump bindata from 2.4.9 to 2.4.10 [\#22](https://github.com/ccrockett/omniauth-keycloak/pull/22) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v1.4.0](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.0) (2021-12-18)
