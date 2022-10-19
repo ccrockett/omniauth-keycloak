@@ -51,6 +51,30 @@ RSpec.describe OmniAuth::Strategies::KeycloakOpenId do
     end
   end
 
+  describe "test mode" do
+    let(:config_url) { "http://localhost:8080/realms/example-realm/.well-known/openid-configuration" }
+
+    subject do
+      stub_request(:get, config_url)
+      OmniAuth::Strategies::KeycloakOpenId.new('keycloak-openid', 'Example-Client', 'b53c572b-9f3b-4e79-bf8b-f03c799ba6ec',
+                                               client_options: {site: 'http://localhost:8080/', realm: 'example-realm', base_url: ''})
+    end
+
+    before do
+      OmniAuth.config.test_mode = true
+    end
+
+    after do
+      OmniAuth.config.test_mode = false
+    end
+
+    it 'should not fetch configuration when in test mode' do
+      subject.setup_phase
+      expect(a_request(:get, config_url)).not_to have_been_made
+      OmniAuth.config.test_mode = false
+    end
+  end
+
   describe 'client base_url option set' do
     context 'to blank string' do
       let(:new_body_endpoints) {
