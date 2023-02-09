@@ -18,7 +18,8 @@ module OmniAuth
             def setup_phase
                 super
 
-                if @authorize_url.nil? || @token_url.nil?
+                if (@authorize_url.nil? || @token_url.nil?) && !OmniAuth.config.test_mode
+
                     prevent_site_option_mistake
 
                     realm = options.client_options[:realm].nil? ? options.client_id : options.client_options[:realm]
