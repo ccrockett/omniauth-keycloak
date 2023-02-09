@@ -51,7 +51,7 @@ module OmniAuth
                             @certs = json["keys"]
                             log :debug, "Successfully got certificate. Certificate length: #{@certs.length}"
                         else
-                            message = "Coundn't get certificate. URL: #{@certs_endpoint}"
+                            message = "Couldn't get certificate. URL: #{@certs_endpoint}"
                             log :error, message
                             raise IntegrationError, message if raise_on_failure
                         end
