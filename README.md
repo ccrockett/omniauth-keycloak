@@ -112,6 +112,8 @@ end
         name: 'keycloak'
     end
     ```
+  * __Pass params from request thru to Keycloak__  
+  See [PR #24](https://github.com/ccrockett/omniauth-keycloak/pull/24) for details on how to configure this.
 
 ## Contributing
 

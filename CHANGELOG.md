@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.5.1](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.1) (2023-03-01)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.5.0...v1.5.1)
+
+**Merged pull requests:**
+
+- Add ability to get params from request and pass thru to keycloak url [\#24](https://github.com/ccrockett/omniauth-keycloak/pull/24) ([ccrockett](https://github.com/ccrockett))
+
 ## [v1.5.0](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.0) (2023-03-01)
 
 [Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.4...v1.5.0)
@@ -7,7 +15,6 @@
 **Closed issues:**
 
 - When in test mode, setup phase tries to fetch Keycloak configuration [\#32](https://github.com/ccrockett/omniauth-keycloak/issues/32)
-- Dependency update - json-jwt [\#36](https://github.com/ccrockett/omniauth-keycloak/issues/36)
 
 **Merged pull requests:**
 
