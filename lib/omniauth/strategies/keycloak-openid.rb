@@ -98,6 +98,11 @@ module OmniAuth
                     deep_symbolize(options.auth_token_params))
             end
 
+            def request_phase
+                options.authorize_options.each {|key| options[key] = request.params[key.to_s] }
+                super
+            end
+
             uid{ raw_info['sub'] }
 
             info do
