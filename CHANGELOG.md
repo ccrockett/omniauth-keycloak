@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.5.0](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.0) (2023-03-01)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.4...v1.5.0)
+
+**Closed issues:**
+
+- When in test mode, setup phase tries to fetch Keycloak configuration [\#32](https://github.com/ccrockett/omniauth-keycloak/issues/32)
+- Dependency update - json-jwt [\#36](https://github.com/ccrockett/omniauth-keycloak/issues/36)
+
+**Merged pull requests:**
+
+- Fix typo [\#34](https://github.com/ccrockett/omniauth-keycloak/pull/34) ([Kazhuu](https://github.com/Kazhuu))
+- Skip fetching keycloak configuration when in testing mode [\#33](https://github.com/ccrockett/omniauth-keycloak/pull/33) ([Kazhuu](https://github.com/Kazhuu))
+
 ## [v1.4.4](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.4) (2022-07-25)
 
 [Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.3...v1.4.4)
@@ -7,7 +21,6 @@
 **Merged pull requests:**
 
 - Fix NoMethodError when querying for JSON Web keys [\#31](https://github.com/ccrockett/omniauth-keycloak/pull/31) ([Kazhuu](https://github.com/Kazhuu))
-- expose id\_token inside extra hash of auth hash [\#26](https://github.com/ccrockett/omniauth-keycloak/pull/26) ([rah-wtag](https://github.com/rah-wtag))
 
 ## [v1.4.3](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.3) (2022-07-24)
 
@@ -38,10 +51,11 @@
 
 - Get Request is now Post Request [\#23](https://github.com/ccrockett/omniauth-keycloak/issues/23)
 - Is the "/auth/" part mandatory in Keycloak's configuration URL? [\#19](https://github.com/ccrockett/omniauth-keycloak/issues/19)
-- Add example instructions for Keycloak configuration [\#14](https://github.com/ccrockett/omniauth-keycloak/issues/14)
+- Keycloak reports incorrect redirect\_uri [\#14](https://github.com/ccrockett/omniauth-keycloak/issues/14)
 
 **Merged pull requests:**
 
+- expose id\_token inside extra hash of auth hash [\#26](https://github.com/ccrockett/omniauth-keycloak/pull/26) ([Riz-v](https://github.com/Riz-v))
 - Bump bindata from 2.4.9 to 2.4.10 [\#22](https://github.com/ccrockett/omniauth-keycloak/pull/22) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v1.4.0](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.0) (2021-12-18)
