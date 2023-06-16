@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.summary       = spec.description
   spec.homepage      = "https://github.com/ccrockett/omniauth-keycloak"
   spec.license       = "MIT"
-  spec.required_rubygems_version = '>= 3.1.2'
+  spec.required_rubygems_version = '>= 1.17.3'
   spec.required_ruby_version = '>= 2.6'
 
   # Specify which files should be added to the gem when it is released.
