@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.5.2](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.2) (2024-02-01)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.5.1...v1.5.2)
+
+**Closed issues:**
+
+- Can we update the dependency [\#45](https://github.com/ccrockett/omniauth-keycloak/issues/45)
+
+**Merged pull requests:**
+
+- Loosen omniauth-oauth2 dependency restriction [\#43](https://github.com/ccrockett/omniauth-keycloak/pull/43) ([mcelaney](https://github.com/mcelaney))
+
 ## [v1.5.1](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.1) (2023-03-01)
 
 [Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.5.0...v1.5.1)
