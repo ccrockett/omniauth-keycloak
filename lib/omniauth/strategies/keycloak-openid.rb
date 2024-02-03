@@ -99,7 +99,9 @@ module OmniAuth
             end
 
             def request_phase
-                options.authorize_options.each {|key| options[key] = request.params[key.to_s] }
+                options.authorize_options.each do |key|
+                  options[key] = request.params[key.to_s] if options[key].nil?
+                end
                 super
             end
 
