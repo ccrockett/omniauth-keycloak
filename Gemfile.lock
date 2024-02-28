@@ -70,7 +70,7 @@ GEM
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
     public_suffix (5.0.3)
-    rack (3.0.8)
+    rack (3.0.9.1)
     rack-protection (3.0.6)
       rack
     rake (13.0.6)
