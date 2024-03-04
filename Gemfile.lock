@@ -10,31 +10,23 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.1.0)
-      base64
-      bigdecimal
+    activesupport (6.1.7.7)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      connection_pool (>= 2.2.5)
-      drb
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
-      mutex_m
       tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     aes_key_wrap (1.1.0)
-    base64 (0.1.1)
-    bigdecimal (3.1.4)
-    bindata (2.4.15)
-    concurrent-ruby (1.2.2)
-    connection_pool (2.4.1)
+    base64 (0.2.0)
+    bindata (2.5.0)
+    concurrent-ruby (1.2.3)
     crack (0.4.5)
       rexml
     diff-lcs (1.5.0)
     docile (1.4.0)
-    drb (2.1.1)
-      ruby2_keywords
-    faraday (2.7.11)
+    faraday (2.8.1)
       base64
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
@@ -45,16 +37,16 @@ GEM
     hashie (5.0.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
-    json-jwt (1.16.3)
+    json-jwt (1.16.6)
       activesupport (>= 4.2)
       aes_key_wrap
+      base64
       bindata
       faraday (~> 2.0)
       faraday-follow_redirects
     jwt (2.7.1)
-    minitest (5.20.0)
+    minitest (5.22.2)
     multi_xml (0.6.0)
-    mutex_m (0.1.2)
     oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
       jwt (>= 1.0, < 3.0)
@@ -105,6 +97,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   ruby
