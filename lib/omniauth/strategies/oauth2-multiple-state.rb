@@ -60,6 +60,10 @@ module OmniAuth
 
         session["omniauth.state_origins"] ||= {}
         session["omniauth.state_origins"][params[:state]] = session['omniauth.origin']
+
+        session['omniauth.states'] = session['omniauth.states'].last(5) if session["omniauth.states"].length > 5
+        session['omniauth.state_origins'] = session['omniauth.state_origins'].to_a.last(5).to_h if session["omniauth.state_origins"].length > 5
+
         params
       end
 
