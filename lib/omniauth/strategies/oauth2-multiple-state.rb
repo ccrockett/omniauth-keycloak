@@ -75,7 +75,7 @@ module OmniAuth
         error = request.params["error_reason"] || request.params["error"]
         if error
           fail!(error, CallbackError.new(request.params["error"], request.params["error_description"] || request.params["error_reason"], request.params["error_uri"]))
-        elsif !options.provider_ignores_state && (request.params["state"].to_s.empty? || session["omniauth.states"].empty? || !session["omniauth.states"].delete(request.params["state"]))
+        elsif !options.provider_ignores_state && (request.params["state"].to_s.empty? || session["omniauth.states"].to_s.empty? || !session["omniauth.states"].delete(request.params["state"]))
           fail!(:csrf_detected, CallbackError.new(:csrf_detected, "CSRF detected"))
         else
           self.access_token = build_access_token
