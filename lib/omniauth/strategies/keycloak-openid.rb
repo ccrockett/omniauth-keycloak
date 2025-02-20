@@ -92,6 +92,7 @@ module OmniAuth
 
             def build_access_token
                 verifier = request.params["code"]
+
                 client.auth_code.get_token(verifier,
                     {:redirect_uri => callback_url.gsub(/\?.+\Z/, "")}
                     .merge(token_params.to_hash(:symbolize_keys => true)),
@@ -102,6 +103,13 @@ module OmniAuth
                 options.authorize_options.each do |key|
                     options[key] = request.params[key.to_s] if [key].nil?
                 end
+
+                if request.params['extra_params']
+                    request.params['extra_params'].each do |key, value|
+                        options.authorize_params[key] = value
+                    end
+                end
+
                 super
             end
 
