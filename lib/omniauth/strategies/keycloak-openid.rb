@@ -102,6 +102,13 @@ module OmniAuth
                 options.authorize_options.each do |key|
                     options[key] = request.params[key.to_s] if [key].nil?
                 end
+
+                if request.params['custom_params']
+                    request.params['custom_params'].each do |key, value|
+                      options.authorize_params[key] = value
+                    end
+                  end
+
                 super
             end
 
