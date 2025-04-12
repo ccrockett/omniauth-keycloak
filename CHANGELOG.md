@@ -1,12 +1,30 @@
 # Changelog
 
+## [v1.5.3](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.3) (2025-04-12)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.5.2...v1.5.3)
+
+**Closed issues:**
+
+- Update json-jwt to 1.16.6 to resolve security vulnerability CVE-2024-27456/GHSA-785g-282q-pwvx [\#49](https://github.com/ccrockett/omniauth-keycloak/issues/49)
+- Can we update the dependency [\#45](https://github.com/ccrockett/omniauth-keycloak/issues/45)
+- Scope setting gets overwritten causing ID token not to be returned from Keycloak [\#39](https://github.com/ccrockett/omniauth-keycloak/issues/39)
+
+**Merged pull requests:**
+
+- Bump rexml from 3.2.6 to 3.2.8 [\#51](https://github.com/ccrockett/omniauth-keycloak/pull/51) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump json-jwt from 1.16.3 to 1.16.6 [\#48](https://github.com/ccrockett/omniauth-keycloak/pull/48) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump rack from 3.0.8 to 3.0.9.1 [\#47](https://github.com/ccrockett/omniauth-keycloak/pull/47) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Conditionally set options from request.params if not set already [\#40](https://github.com/ccrockett/omniauth-keycloak/pull/40) ([Kazhuu](https://github.com/Kazhuu))
+
 ## [v1.5.2](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.2) (2024-02-01)
 
 [Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.5.1...v1.5.2)
 
 **Closed issues:**
 
-- Can we update the dependency [\#45](https://github.com/ccrockett/omniauth-keycloak/issues/45)
+- Dependency update - json-jwt [\#36](https://github.com/ccrockett/omniauth-keycloak/issues/36)
+-  Adding parameters and http headers to omniauth authorize path helper [\#12](https://github.com/ccrockett/omniauth-keycloak/issues/12)
 
 **Merged pull requests:**
 
