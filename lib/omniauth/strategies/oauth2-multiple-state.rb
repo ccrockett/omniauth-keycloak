@@ -73,19 +73,19 @@ module OmniAuth
 
       def callback_phase # rubocop:disable AbcSize, CyclomaticComplexity, MethodLength, PerceivedComplexity
         error = request.params["error_reason"] || request.params["error"]
-        if error
-          fail!(error, CallbackError.new(request.params["error"], request.params["error_description"] || request.params["error_reason"], request.params["error_uri"]))
-        elsif !options.provider_ignores_state && (request.params["state"].to_s.empty? || session["omniauth.states"].to_s.empty? || !session["omniauth.states"].delete(request.params["state"]))
-          fail!(:csrf_detected, CallbackError.new(:csrf_detected, "CSRF detected"))
-        else
-          self.access_token = build_access_token
-          self.access_token = access_token.refresh! if access_token.expired?
 
-          if session['omniauth.state_origins'] && session['omniauth.state_origins'][request.params['state']]
-            env['omniauth.origin'] = session['omniauth.state_origins'].delete(request.params['state'])
-          end
-          super
+        fail_with_error(:session_expired_on_tab, { "error" => "session_expired_on_tab", "error_description" => "Session expired on tab" }) if session_expired_on_tab?(error, request.params["error_description"])
+        fail_with_error(error, request.params) if error && !session_expired_on_tab?(error, request.params["error_description"])
+        fail_with_error(:csrf_detected, { "error" => "csrf_detected", "error_description" => "CSRF detected" }) if csrf_detected?
+
+        self.access_token = build_access_token
+        self.access_token = access_token.refresh! if access_token.expired?
+
+        if session['omniauth.state_origins'] && session['omniauth.state_origins'][request.params['state']]
+          env['omniauth.origin'] = session['omniauth.state_origins'].delete(request.params['state'])
         end
+        
+        super
       rescue ::OAuth2::Error, CallbackError => e
         fail!(:invalid_credentials, e)
       rescue ::Timeout::Error, ::Errno::ETIMEDOUT => e
@@ -115,6 +115,21 @@ module OmniAuth
           hash[key.to_sym] = options[key]
         end
         hash
+      end
+
+      def fail_with_error(error, params)
+        fail!(error, CallbackError.new(error, params["error_description"] || params["error_reason"], params["error_uri"]))
+      end
+
+      def session_expired_on_tab?(error, error_description)
+        return unless error
+        return false unless error == 'temporarily_unavailable' && error_description == 'authentication_expired'
+
+        true
+      end
+
+      def csrf_detected?(params)
+        !options.provider_ignores_state && (params["state"].to_s.empty? || session["omniauth.states"].to_s.empty? || !session["omniauth.states"].delete(params["state"]))
       end
 
       # An error that is indicated in the OAuth 2.0 callback.
