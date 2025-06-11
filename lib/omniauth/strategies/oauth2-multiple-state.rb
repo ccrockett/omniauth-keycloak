@@ -75,7 +75,7 @@ module OmniAuth
         error = request.params["error_reason"] || request.params["error"]
 
         fail_with_error(:session_expired_on_tab, { "error" => "session_expired_on_tab", "error_description" => "Session expired on tab" }) if session_expired_on_tab?(error, request.params["error_description"])
-        fail_with_error(error, request.params) if error && !session_expired_on_tab?(error, request.params["error_description"])
+        fail_with_error(error, request.params) if error
         fail_with_error(:csrf_detected, { "error" => "csrf_detected", "error_description" => "CSRF detected" }) if csrf_detected?
 
         self.access_token = build_access_token
@@ -122,7 +122,7 @@ module OmniAuth
       end
 
       def session_expired_on_tab?(error, error_description)
-        return unless error
+        return false unless error
         return false unless error == 'temporarily_unavailable' && error_description == 'authentication_expired'
 
         true
