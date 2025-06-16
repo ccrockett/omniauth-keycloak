@@ -76,7 +76,7 @@ module OmniAuth
 
         fail_with_error(:session_expired_on_tab, { "error" => "session_expired_on_tab", "error_description" => "Session expired on tab" }) if session_expired_on_tab?(error, request.params["error_description"])
         fail_with_error(error, request.params) if error
-        fail_with_error(:csrf_detected, { "error" => "csrf_detected", "error_description" => "CSRF detected" }) if csrf_detected?
+        fail_with_error(:csrf_detected, { "error" => "csrf_detected", "error_description" => "CSRF detected" }) if csrf_detected?(request.params)
 
         self.access_token = build_access_token
         self.access_token = access_token.refresh! if access_token.expired?
