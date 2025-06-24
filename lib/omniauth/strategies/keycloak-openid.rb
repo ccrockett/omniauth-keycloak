@@ -92,8 +92,10 @@ module OmniAuth
 
             def build_access_token
                 verifier = request.params["code"]
+                code_verifier = session.delete("pkce.code_verifier")
+                
                 client.auth_code.get_token(verifier,
-                    {:redirect_uri => callback_url.gsub(/\?.+\Z/, "")}
+                    {:redirect_uri => callback_url.gsub(/\?.+\Z/, ""), :code_verifier => code_verifier}
                     .merge(token_params.to_hash(:symbolize_keys => true)),
                     deep_symbolize(options.auth_token_params))
             end
