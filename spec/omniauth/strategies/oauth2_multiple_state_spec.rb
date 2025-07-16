@@ -99,22 +99,21 @@ RSpec.describe OmniAuth::Strategies::OAuth2MultipleState do
     end
 
     context 'when state does not match' do
-      it 'raises a CallbackError' do
+      it 'calls fail! with :csrf_detected' do
         allow(subject).to receive(:session).and_return({
-        'omniauth.states' => ['invalid_state'],
-        'omniauth.state_origins' => { 'invalid_state' => 'origin' }
+          'omniauth.states' => ['invalid_state'],
+          'omniauth.state_origins' => { 'invalid_state' => 'origin' }
         })
-
-        allow(subject).to receive(:fail!) do |_, exception|
-          raise exception
-        end
-
-        expect { subject.callback_phase }.to raise_error(OmniAuth::Strategies::OAuth2MultipleState::CallbackError) do |error|
-          expect(error.error).to eq(:csrf_detected)
-          expect(error.error_reason).to eq('CSRF detected')
-          expect(error.error_uri).to be_nil
-          expect(error.message).to eq('csrf_detected | CSRF detected')
-        end
+    
+        expect(subject).to receive(:fail!).with(
+          :csrf_detected,
+          hash_including(
+            error: "csrf_detected",
+            error_description: "CSRF detected"
+          )
+        )
+    
+        subject.callback_phase
       end
     end
   end
