@@ -75,10 +75,9 @@ module OmniAuth
         error = request.params["error_reason"] || request.params["error"]
         error_description = request.params["error_description"]
       
-        
-        return fail!(:session_expired_on_tab, error: error, error_description: error_description) if session_expired_on_tab?(error, error_description)
-        return fail!(:oauth_error, error: error, error_description: error_description) if error
-        return fail!(:csrf_detected, error: "csrf_detected", error_description: "CSRF detected") if csrf_detected?(request.params)
+        return fail_with_error(:session_expired_on_tab, request.params) if session_expired_on_tab?(error, request.params["error_description"])
+        return fail_with_error(:oauth_error, request.params) if error
+        return fail_with_error(:csrf_detected, request.params) if csrf_detected?(request.params)
       
         self.access_token = build_access_token
         self.access_token = access_token.refresh! if access_token.expired?
@@ -129,6 +128,27 @@ module OmniAuth
 
       def csrf_detected?(params)
         !options.provider_ignores_state && (params["state"].to_s.empty? || session["omniauth.states"].to_s.empty? || !session["omniauth.states"].delete(params["state"]))
+      end
+
+      def fail_with_error(error, params)
+        exception = CallbackError.new(error, params["error_description"] || params["error_reason"], params["error_uri"])
+        fail!(error, exception)
+      end
+      
+      # An error that is indicated in the OAuth 2.0 callback.
+      # This could be a `redirect_uri_mismatch` or other
+      class CallbackError < StandardError
+        attr_accessor :error, :error_reason, :error_uri
+
+        def initialize(error, error_reason = nil, error_uri = nil)
+          self.error = error
+          self.error_reason = error_reason
+          self.error_uri = error_uri
+        end
+
+        def message
+          [error, error_reason, error_uri].compact.join(" | ")
+        end
       end
     end
   end
