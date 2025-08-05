@@ -13,10 +13,13 @@ module OmniAuth
 
             attr_reader :authorize_url
             attr_reader :token_url
-            attr_reader :cert
+            attr_reader :certs
 
             def setup_phase
-                if @authorize_url.nil? || @token_url.nil?
+                super
+
+                if (@authorize_url.nil? || @token_url.nil?) && !OmniAuth.config.test_mode
+
                     prevent_site_option_mistake
 
                     realm = options.client_options[:realm].nil? ? options.client_id : options.client_options[:realm]
@@ -29,7 +32,7 @@ module OmniAuth
                     log :debug, "Going to get Keycloak configuration. URL: #{config_url}"
                     response = Faraday.get config_url
                     if (response.status == 200)
-                        json = MultiJson.load(response.body)
+                        json = JSON.parse(response.body)
 
                         @certs_endpoint = json["jwks_uri"]
                         @userinfo_endpoint = json["userinfo_endpoint"]
@@ -45,11 +48,11 @@ module OmniAuth
                         log :debug, "Going to get certificates. URL: #{@certs_endpoint}"
                         certs = Faraday.get @certs_endpoint
                         if (certs.status == 200)
-                            json = MultiJson.load(certs.body)
-                            @cert = json["keys"][0]
-                            log :debug, "Successfully got certificate. Certificate length: #{@cert.length}"
+                            json = JSON.parse(certs.body)
+                            @certs = json["keys"]
+                            log :debug, "Successfully got certificate. Certificate length: #{@certs.length}"
                         else
-                            message = "Coundn't get certificate. URL: #{@certs_endpoint}"
+                            message = "Couldn't get certificate. URL: #{@certs_endpoint}"
                             log :error, message
                             raise IntegrationError, message if raise_on_failure
                         end
@@ -60,6 +63,14 @@ module OmniAuth
                         raise IntegrationError, message if raise_on_failure
                     end
                 end
+            end
+
+            def auth_url_base
+              return '/auth' unless options.client_options[:base_url]
+              base_url = options.client_options[:base_url]
+              return base_url if (base_url == '' || base_url[0] == '/')
+
+              raise ConfigurationError, "Keycloak base_url option should start with '/'. Current value: #{base_url}"
             end
 
             def prevent_site_option_mistake
@@ -87,6 +98,13 @@ module OmniAuth
                     deep_symbolize(options.auth_token_params))
             end
 
+            def request_phase
+                options.authorize_options.each do |key|
+                  options[key] = request.params[key.to_s] if options[key].nil?
+                end
+                super
+            end
+
             uid{ raw_info['sub'] }
 
             info do
@@ -100,14 +118,15 @@ module OmniAuth
 
             extra do
             {
-                'raw_info' => raw_info
+                'raw_info' => raw_info,
+                'id_token' => access_token['id_token']
             }
             end
 
             def raw_info
                 id_token_string = access_token.token
-                jwk = JSON::JWK.new(@cert)
-                id_token = JSON::JWT.decode id_token_string, jwk
+                jwks = JSON::JWK::Set.new(@certs)
+                id_token = JSON::JWT.decode id_token_string, jwks
                 id_token
             end
 

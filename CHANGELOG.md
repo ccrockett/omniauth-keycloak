@@ -1,8 +1,126 @@
 # Changelog
 
-## [v1.2.1](https://github.com/ccrockett/omniauth-keycloak/tree/HEAD)
+## [v1.5.3](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.3) (2025-04-12)
 
-[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.2.0...HEAD)
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.5.2...v1.5.3)
+
+**Closed issues:**
+
+- Update json-jwt to 1.16.6 to resolve security vulnerability CVE-2024-27456/GHSA-785g-282q-pwvx [\#49](https://github.com/ccrockett/omniauth-keycloak/issues/49)
+- Can we update the dependency [\#45](https://github.com/ccrockett/omniauth-keycloak/issues/45)
+- Scope setting gets overwritten causing ID token not to be returned from Keycloak [\#39](https://github.com/ccrockett/omniauth-keycloak/issues/39)
+
+**Merged pull requests:**
+
+- Bump rexml from 3.2.6 to 3.2.8 [\#51](https://github.com/ccrockett/omniauth-keycloak/pull/51) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump json-jwt from 1.16.3 to 1.16.6 [\#48](https://github.com/ccrockett/omniauth-keycloak/pull/48) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump rack from 3.0.8 to 3.0.9.1 [\#47](https://github.com/ccrockett/omniauth-keycloak/pull/47) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Conditionally set options from request.params if not set already [\#40](https://github.com/ccrockett/omniauth-keycloak/pull/40) ([Kazhuu](https://github.com/Kazhuu))
+
+## [v1.5.2](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.2) (2024-02-01)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.5.1...v1.5.2)
+
+**Closed issues:**
+
+- Dependency update - json-jwt [\#36](https://github.com/ccrockett/omniauth-keycloak/issues/36)
+-  Adding parameters and http headers to omniauth authorize path helper [\#12](https://github.com/ccrockett/omniauth-keycloak/issues/12)
+
+**Merged pull requests:**
+
+- Loosen omniauth-oauth2 dependency restriction [\#43](https://github.com/ccrockett/omniauth-keycloak/pull/43) ([mcelaney](https://github.com/mcelaney))
+
+## [v1.5.1](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.1) (2023-03-01)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.5.0...v1.5.1)
+
+**Merged pull requests:**
+
+- Add ability to get params from request and pass thru to keycloak url [\#24](https://github.com/ccrockett/omniauth-keycloak/pull/24) ([ccrockett](https://github.com/ccrockett))
+
+## [v1.5.0](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.0) (2023-03-01)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.4...v1.5.0)
+
+**Closed issues:**
+
+- When in test mode, setup phase tries to fetch Keycloak configuration [\#32](https://github.com/ccrockett/omniauth-keycloak/issues/32)
+
+**Merged pull requests:**
+
+- Fix typo [\#34](https://github.com/ccrockett/omniauth-keycloak/pull/34) ([Kazhuu](https://github.com/Kazhuu))
+- Skip fetching keycloak configuration when in testing mode [\#33](https://github.com/ccrockett/omniauth-keycloak/pull/33) ([Kazhuu](https://github.com/Kazhuu))
+
+## [v1.4.4](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.4) (2022-07-25)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.3...v1.4.4)
+
+**Merged pull requests:**
+
+- Fix NoMethodError when querying for JSON Web keys [\#31](https://github.com/ccrockett/omniauth-keycloak/pull/31) ([Kazhuu](https://github.com/Kazhuu))
+
+## [v1.4.3](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.3) (2022-07-24)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.2...v1.4.3)
+
+**Fixed bugs:**
+
+- Error: uninitialized constant OmniAuth::Strategies::KeycloakOpenId::MultiJson after gem update [\#30](https://github.com/ccrockett/omniauth-keycloak/issues/30)
+
+## [v1.4.2](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.2) (2022-06-14)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.1...v1.4.2)
+
+**Closed issues:**
+
+- Adjust endpoints to updated Keycloak paths [\#29](https://github.com/ccrockett/omniauth-keycloak/issues/29)
+- Expose id\_token inside extra hash of auth hash [\#25](https://github.com/ccrockett/omniauth-keycloak/issues/25)
+
+**Merged pull requests:**
+
+- Set omniauth version to \>= 2.0 [\#28](https://github.com/ccrockett/omniauth-keycloak/pull/28) ([hobbypunk90](https://github.com/hobbypunk90))
+
+## [v1.4.1](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.1) (2022-05-25)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.4.0...v1.4.1)
+
+**Closed issues:**
+
+- Get Request is now Post Request [\#23](https://github.com/ccrockett/omniauth-keycloak/issues/23)
+- Is the "/auth/" part mandatory in Keycloak's configuration URL? [\#19](https://github.com/ccrockett/omniauth-keycloak/issues/19)
+- Keycloak reports incorrect redirect\_uri [\#14](https://github.com/ccrockett/omniauth-keycloak/issues/14)
+
+**Merged pull requests:**
+
+- expose id\_token inside extra hash of auth hash [\#26](https://github.com/ccrockett/omniauth-keycloak/pull/26) ([Riz-v](https://github.com/Riz-v))
+- Bump bindata from 2.4.9 to 2.4.10 [\#22](https://github.com/ccrockett/omniauth-keycloak/pull/22) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v1.4.0](https://github.com/ccrockett/omniauth-keycloak/tree/v1.4.0) (2021-12-18)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.3.0...v1.4.0)
+
+**Closed issues:**
+
+- Are there any reason to specify one certificate key to decode JWT? [\#17](https://github.com/ccrockett/omniauth-keycloak/issues/17)
+- No route matches \[POST\] "/auth/keycloak\_openid" [\#15](https://github.com/ccrockett/omniauth-keycloak/issues/15)
+
+**Merged pull requests:**
+
+- Use JSON::JWK::Set instead of JSON::JWK [\#21](https://github.com/ccrockett/omniauth-keycloak/pull/21) ([hobbypunk90](https://github.com/hobbypunk90))
+- Allow pass a Proc to the setup option when you specify a strategy [\#18](https://github.com/ccrockett/omniauth-keycloak/pull/18) ([Cambero](https://github.com/Cambero))
+- Add information on how to use it to readme [\#16](https://github.com/ccrockett/omniauth-keycloak/pull/16) ([frenesim](https://github.com/frenesim))
+
+## [v1.3.0](https://github.com/ccrockett/omniauth-keycloak/tree/v1.3.0) (2021-05-17)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.2.1...v1.3.0)
+
+**Merged pull requests:**
+
+- Bump Omniauth dependencies to v2 [\#13](https://github.com/ccrockett/omniauth-keycloak/pull/13) ([offner](https://github.com/offner))
+
+## [v1.2.1](https://github.com/ccrockett/omniauth-keycloak/tree/v1.2.1) (2020-12-19)
+
+[Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.2.0...v1.2.1)
 
 **Closed issues:**
 
