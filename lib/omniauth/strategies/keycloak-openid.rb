@@ -27,7 +27,7 @@ module OmniAuth
 
                     raise_on_failure = options.client_options.fetch(:raise_on_failure, false)
 
-                    config_url = URI.join(site, "#{auth_url_base}/realms/#{realm}/.well-known/openid-configuration")
+                    config_url = URI.join(site, "/realms/#{realm}/.well-known/openid-configuration")
 
                     log :debug, "Going to get Keycloak configuration. URL: #{config_url}"
                     response = Faraday.get config_url
