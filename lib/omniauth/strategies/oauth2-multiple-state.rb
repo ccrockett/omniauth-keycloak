@@ -3,6 +3,8 @@ require "omniauth"
 require "securerandom"
 require "socket"       # for SocketError
 require "timeout"      # for Timeout::Error
+require "base64"
+require "digest"
 
 module OmniAuth
   module Strategies
@@ -51,6 +53,12 @@ module OmniAuth
       def authorize_params
         options.authorize_params[:state] = SecureRandom.hex(24)
         params = options.authorize_params.merge(options_for("authorize"))
+
+        code_verifier, code_challenge = generate_pkce_pair
+        session["pkce.code_verifier"] = code_verifier
+        params[:code_challenge] = code_challenge
+        params[:code_challenge_method] = "S256"
+
         if OmniAuth.config.test_mode
           @env ||= {}
           @env["rack.session"] ||= {}
@@ -97,6 +105,12 @@ module OmniAuth
       
 
     protected
+
+      def generate_pkce_pair
+        code_verifier = SecureRandom.urlsafe_base64(32)
+        code_challenge = Base64.urlsafe_encode64(Digest::SHA256.digest(code_verifier)).tr("=", "")
+        [code_verifier, code_challenge]
+      end
 
       def build_access_token
         verifier = request.params["code"]
