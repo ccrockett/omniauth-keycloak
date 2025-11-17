@@ -69,8 +69,14 @@ module OmniAuth
         session["omniauth.state_origins"] ||= {}
         session["omniauth.state_origins"][params[:state]] = session['omniauth.origin']
 
+        if params[:kc_action]
+          session["omniauth.state_kc_actions"] ||= {}
+          session["omniauth.state_kc_actions"][params[:state]] = params[:kc_action]
+        end
+
         session['omniauth.states'] = session['omniauth.states'].last(5) if session["omniauth.states"].length > 5
         session['omniauth.state_origins'] = session['omniauth.state_origins'].to_a.last(5).to_h if session["omniauth.state_origins"].length > 5
+        session['omniauth.state_kc_actions'] = session['omniauth.state_kc_actions'].to_a.last(5).to_h if session["omniauth.state_kc_actions"] && session["omniauth.state_kc_actions"].length > 5
 
         params
       end
@@ -90,8 +96,17 @@ module OmniAuth
         self.access_token = build_access_token
         self.access_token = access_token.refresh! if access_token.expired?
       
+        if request.params["kc_action_status"]
+          session["omniauth.kc_action_status"] = request.params["kc_action_status"]
+        end
+        
         if session["omniauth.state_origins"] && request.params["state"]
           env["omniauth.origin"] = session["omniauth.state_origins"].delete(request.params["state"])
+        end
+
+        if session["omniauth.state_kc_actions"] && request.params["state"]
+          kc_action = session["omniauth.state_kc_actions"].delete(request.params["state"])
+          session["omniauth.kc_action"] = kc_action if kc_action
         end
       
         super

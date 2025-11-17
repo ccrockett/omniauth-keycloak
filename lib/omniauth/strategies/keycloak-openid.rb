@@ -126,10 +126,13 @@ module OmniAuth
             end
 
             extra do
-            {
+            hash = {
                 'raw_info' => raw_info,
                 'id_token' => access_token['id_token']
             }
+            hash['kc_action_status'] = session.delete("omniauth.kc_action_status") if session["omniauth.kc_action_status"]
+            hash['kc_action'] = session.delete("omniauth.kc_action") if session["omniauth.kc_action"]
+            hash
             end
 
             def raw_info
