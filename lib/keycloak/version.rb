@@ -1,5 +1,5 @@
 module Omniauth
   module Keycloak
-    VERSION = '1.5.3'
+    VERSION = "1.2.2"
   end
 end
