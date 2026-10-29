@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+**Security fixes:**
+
+- `raw_info` now decodes the OIDC `id_token` returned in the token response instead of the OAuth2 access token (CWE-287).
+- `JSON::JWT.decode` now pins the expected signing algorithm to `RS256`, so a forged token using `alg: none` or an HS256/RS256 algorithm-confusion attack is rejected outright instead of silently validating (CWE-347, CWE-757).
+- `raw_info` now validates the id_token's `iss` against the issuer in the realm's discovery document (falling back to the URL derived from `site`/`realm` when discovery has not run; a mismatch between the two is logged as a warning), `aud` against the configured client id, `azp` against the client id (required when `aud` has several values), and `exp`/`nbf` with 60 seconds of clock-skew leeway, raising `OmniAuth::Strategies::KeycloakOpenId::InvalidIdToken` on failure.
+- A token response with no `id_token` now raises `InvalidIdToken`, and a missing signing-key set raises `IntegrationError`, instead of an opaque `NoMethodError` / `KidNotFound`.
+
+**Behaviour changes for consumers:**
+
+- The strategy now requests the `openid` scope by default (`authorize_params`), because `raw_info` needs the id_token.
+- `raw_info` (and `extra['raw_info']`) now holds the **id_token** claims rather than the access-token claims. Any claim a consumer reads from it, including custom mapper claims, must be configured in Keycloak to be added to the ID token.
+
 ## [v1.5.3](https://github.com/ccrockett/omniauth-keycloak/tree/v1.5.3) (2025-04-12)
 
 [Full Changelog](https://github.com/ccrockett/omniauth-keycloak/compare/v1.5.2...v1.5.3)

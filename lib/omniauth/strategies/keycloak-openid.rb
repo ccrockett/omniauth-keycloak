@@ -10,6 +10,14 @@ module OmniAuth
             class Error < RuntimeError; end
             class ConfigurationError < Error; end
             class IntegrationError < Error; end
+            class InvalidIdToken < Error; end
+
+            ID_TOKEN_ALGORITHM = :RS256
+            # Leeway in seconds for clock drift between this host and Keycloak when checking exp/nbf.
+            ID_TOKEN_CLOCK_SKEW = 60
+
+            # raw_info verifies the OIDC id_token, so ask for the scope that makes it an OIDC request.
+            option :authorize_params, { scope: 'openid' }
 
             attr_reader :authorize_url
             attr_reader :token_url
@@ -22,7 +30,7 @@ module OmniAuth
 
                     prevent_site_option_mistake
 
-                    realm = options.client_options[:realm].nil? ? options.client_id : options.client_options[:realm]
+                    realm = realm_name
                     site = options.client_options[:site]
 
                     raise_on_failure = options.client_options.fetch(:raise_on_failure, false)
@@ -34,6 +42,17 @@ module OmniAuth
                     if (response.status == 200)
                         json = JSON.parse(response.body)
 
+                        issuer = json["issuer"]
+                        if issuer.is_a?(String) && !issuer.empty?
+                            @issuer = issuer
+                            if @issuer != configured_issuer
+                                log :warn, "Keycloak discovery issuer #{@issuer.inspect} differs from the configured " \
+                                           "site/realm #{configured_issuer.inspect}; id_tokens are checked against the discovery issuer"
+                            end
+                        else
+                            log :warn, "Keycloak discovery document has no issuer; id_tokens are checked against " \
+                                       "the configured site/realm #{configured_issuer.inspect}"
+                        end
                         @certs_endpoint = json["jwks_uri"]
                         @userinfo_endpoint = json["userinfo_endpoint"]
                         @authorize_url = URI(json["authorization_endpoint"]).path
@@ -124,10 +143,68 @@ module OmniAuth
             end
 
             def raw_info
-                id_token_string = access_token.token
+                id_token_string = access_token['id_token']
+                if id_token_string.nil? || id_token_string.empty?
+                    raise InvalidIdToken, "Token response has no id_token. Is the 'openid' scope requested?"
+                end
+                if @certs.nil? || @certs.empty?
+                    raise IntegrationError, "No Keycloak signing keys loaded (certs endpoint: #{@certs_endpoint.inspect}); cannot verify id_token"
+                end
+
                 jwks = JSON::JWK::Set.new(@certs)
-                id_token = JSON::JWT.decode id_token_string, jwks
+                id_token = JSON::JWT.decode id_token_string, jwks, ID_TOKEN_ALGORITHM
+                verify_issuer! id_token
+                verify_audience! id_token
+                verify_lifetime! id_token
                 id_token
+            end
+
+            # The issuer from the discovery document, which is also where the signing keys came from;
+            # falls back to the URL derived from site/realm when setup_phase has not fetched it.
+            def expected_issuer
+                @issuer || configured_issuer
+            end
+
+            def configured_issuer
+                realm = realm_name
+                site = options.client_options[:site]
+
+                URI.join(site, "#{auth_url_base}/realms/#{realm}").to_s
+            end
+
+            def realm_name
+                options.client_options[:realm].nil? ? options.client_id : options.client_options[:realm]
+            end
+
+            def verify_issuer!(id_token)
+                return if id_token['iss'] == expected_issuer
+
+                raise InvalidIdToken, "Unexpected id_token issuer: #{id_token['iss'].inspect} (expected #{expected_issuer.inspect})"
+            end
+
+            def verify_audience!(id_token)
+                audience = Array(id_token['aud'])
+                unless audience.include?(options.client_id)
+                    raise InvalidIdToken, "Unexpected id_token audience: #{id_token['aud'].inspect} (expected to include #{options.client_id.inspect})"
+                end
+
+                azp = id_token['azp']
+                return if azp == options.client_id
+                return if azp.nil? && audience.length == 1
+
+                raise InvalidIdToken, "Unexpected id_token azp: #{azp.inspect} (expected #{options.client_id.inspect})"
+            end
+
+            def verify_lifetime!(id_token)
+                now = Time.now.to_i
+                exp = id_token['exp']
+                raise InvalidIdToken, "id_token has no numeric exp claim: #{exp.inspect}" unless exp.is_a?(Numeric)
+                raise InvalidIdToken, "id_token expired at #{exp} (now #{now})" if now > exp + ID_TOKEN_CLOCK_SKEW
+
+                nbf = id_token['nbf']
+                return unless nbf.is_a?(Numeric) && now + ID_TOKEN_CLOCK_SKEW < nbf
+
+                raise InvalidIdToken, "id_token not valid before #{nbf} (now #{now})"
             end
 
             OmniAuth.config.add_camelization('keycloak_openid', 'KeycloakOpenId')
